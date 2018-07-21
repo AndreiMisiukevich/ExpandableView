@@ -21,7 +21,6 @@ This plugin provides opportunity to create expandable views
 <expandable:ExpandableView>
     <expandable:ExpandableView.PrimaryView>
         //{YOUR MAIN VIEW HERE}
-        </ContentView>
     </expandable:ExpandableView.PrimaryView>
     <expandable:ExpandableView.SecondaryViewTemplate>
         <DataTemplate>
