@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>ExpandableView</id>
+    <version>1.0.0</version>
+    <title>ExpandableView</title>
+    <authors>Andrei Misiukevich</authors>
+    <owners>Andrei Misiukevich</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/AndreiMisiukevich/ExpandableView</projectUrl>
+    <iconUrl>https://cdn0.iconfinder.com/data/icons/pinpoint-interface/48/dropdown-512.png</iconUrl>
+    <description>Expandable view for Xamarin.Forms</description>
+    <summary>This plugin provides opportunity to create expandable views</summary>
+    <tags>expandableView, expanded, expander, expandable, expandable view, forms, xamarin forms, xamarin.forms</tags>
+    <dependencies>
+      <group>
+          <dependency id="Xamarin.Forms" version="2.4" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!--Net Standard-->
+    <file src="ExpandableView\bin\Release\netstandard2.0\ExpandableView.dll" target="lib\netstandard2.0\ExpandableView.dll" />
+    <!--Core PCL-->
+    <file src="ExpandableView\bin\Release\netstandard2.0\ExpandableView.dll" target="lib\portable-win+net45+wp80+win81+wpa81\ExpandableView.dll" />
+    <!--Xamarin.Android-->
+    <file src="ExpandableView\bin\Release\netstandard2.0\ExpandableView.dll" target="lib\MonoAndroid10\ExpandableView.dll" />
+    <!--Xamarin.iOS-->
+    <file src="ExpandableView\bin\Release\netstandard2.0\ExpandableView.dll" target="lib\Xamarin.iOS10\ExpandableView.dll" />
+  </files>
+</package>
