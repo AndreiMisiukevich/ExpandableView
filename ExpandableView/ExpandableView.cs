@@ -84,7 +84,7 @@ namespace Expandable
 			{
 				if (_secondaryView != null)
 				{
-					_secondaryView.SizeChanged -= OnSubViewSizeChanged;
+					_secondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
 					Children.Remove(_secondaryView);
 				}
 				if (value != null)
@@ -113,7 +113,7 @@ namespace Expandable
 				return;
 			}
 
-			SecondaryView.SizeChanged -= OnSubViewSizeChanged;
+			SecondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
 
 			var isExpanding = SecondaryView.AnimationIsRunning(ExpandAnimationName);
 			SecondaryView.AbortAnimation(ExpandAnimationName);
@@ -136,7 +136,7 @@ namespace Expandable
 				{
 					shouldInvokeAnimation = false;
 					SecondaryView.HeightRequest = -1;
-					SecondaryView.SizeChanged += OnSubViewSizeChanged;
+					SecondaryView.SizeChanged += OnSecondaryViewSizeChanged;
 				}
 			}
 			else
@@ -197,10 +197,10 @@ namespace Expandable
 			return template?.CreateContent() as View;
 		}
 
-		private void OnSubViewSizeChanged(object sender, EventArgs e)
+		private void OnSecondaryViewSizeChanged(object sender, EventArgs e)
 		{
 			if (SecondaryView.Height <= 0) return;
-			SecondaryView.SizeChanged -= OnSubViewSizeChanged;
+			SecondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
 			SecondaryView.HeightRequest = 0;
 			_endHeight = SecondaryView.Height;
 			InvokeAnimation();
