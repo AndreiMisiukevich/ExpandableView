@@ -240,7 +240,7 @@ namespace Expandable
 
             parentAnimation.Add(0, 1, expandAnimation);
 
-            if(ShouldRotate)
+            if(ShouldRotate && ExpandCommandView != null)
             {
                 var startRotation = 0;
                 var endRotation = 180;
