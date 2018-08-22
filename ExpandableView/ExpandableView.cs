@@ -32,6 +32,10 @@ namespace Expandable
 
 		public static readonly BindableProperty SecondaryViewHeightRequestProperty = BindableProperty.Create(nameof(SecondaryViewHeightRequest), typeof(double), typeof(ExpandableView), 0.0);
 
+        public static readonly BindableProperty ExpandCommandViewProperty = BindableProperty.Create(nameof(ExpandCommandView), typeof(View), typeof(ExpandableView), null);
+
+        public static readonly BindableProperty ShouldRotateProperty = BindableProperty.Create(nameof(ShouldRotate), typeof(bool), typeof(ExpandableView), false);
+
 		private readonly TapGestureRecognizer _defaultTapGesture;
 		private bool _shouldIgnoreAnimation;
 		private double _lastVisibleHeight = -1;
@@ -76,6 +80,18 @@ namespace Expandable
 			get => (double)GetValue(SecondaryViewHeightRequestProperty);
 			set => SetValue(SecondaryViewHeightRequestProperty, value);
 		}
+
+        public View ExpandCommandView
+        {
+            get => GetValue(ExpandCommandViewProperty) as View;
+            set => SetValue(ExpandCommandViewProperty, value);
+        }
+
+        public bool ShouldRotate
+        {
+            get => (bool)GetValue(ShouldRotateProperty);
+            set => SetValue(ShouldRotateProperty, value);
+        }
 
 		public View SecondaryView
 		{
@@ -163,11 +179,15 @@ namespace Expandable
 			{
 				return;
 			}
-			PrimaryView.GestureRecognizers.Remove(_defaultTapGesture);
-			if(ShouldHandleTapToExpand)
-			{
-				PrimaryView.GestureRecognizers.Add(_defaultTapGesture);
-			}
+
+            var viewToAttachTapGesture = ExpandCommandView ?? PrimaryView;
+
+            viewToAttachTapGesture.GestureRecognizers.Remove(_defaultTapGesture);
+
+            if (ShouldHandleTapToExpand)
+            {
+                viewToAttachTapGesture.GestureRecognizers.Add(_defaultTapGesture);
+            }
 		}
 
 		private void SetPrimaryView(View oldView)
@@ -215,16 +235,34 @@ namespace Expandable
 				return;
 			}
 
-			new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight)
-				.Commit(SecondaryView,
-						ExpandAnimationName,
-						finished: (v, r) =>
+            var parentAnimation = new Animation();
+            var expandAnimation = new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight, Easing.Linear);
+
+            parentAnimation.Add(0, 1, expandAnimation);
+
+            if(ShouldRotate)
+            {
+                var startRotation = 0;
+                var endRotation = 180;
+                if (!IsExpanded)
+                {
+                    startRotation = 180;
+                    endRotation = 0;
+                }
+
+                var rotateAnimation = new Animation(v => ExpandCommandView.Rotation = v, startRotation, endRotation, Easing.BounceIn);
+                parentAnimation.Add(0, 1, rotateAnimation);
+            }
+
+            parentAnimation.Commit(SecondaryView,
+					ExpandAnimationName,
+					finished: (v, r) =>
+					{
+						if (!IsExpanded)
 						{
-							if (!IsExpanded)
-							{
-								SecondaryView.IsVisible = false;
-							};
-						});
+							SecondaryView.IsVisible = false;
+						}
+					});
 		}
 	}
 }
