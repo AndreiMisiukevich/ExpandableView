@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:expandable="clr-namespace:Expandable;assembly=ExpandableView"
+             x:Class="ExpandableViewSample.AttachTapGestureToCustomViewPage">
+    <StackLayout Padding="8">
+        <expandable:ExpandableView ExpandCommandView="{x:Reference arrow}" ShouldRotate="true">
+            <expandable:ExpandableView.PrimaryView>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Expandable view" FontSize="30" VerticalTextAlignment="Center"/>
+                    <Image x:Name="arrow" Source="arrow_drop_down.png" HeightRequest="60" WidthRequest="60" HorizontalOptions="EndAndExpand"/>
+                </StackLayout>
+            </expandable:ExpandableView.PrimaryView>
+            <expandable:ExpandableView.SecondaryViewTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="Item" FontSize="Large"/>
+                        <Label Text="Item" FontSize="Large"/>
+                        <Label Text="Item" FontSize="Large"/>
+                        <Label Text="Item" FontSize="Large"/>
+                        <Label Text="Item" FontSize="Large"/>
+                    </StackLayout>
+                </DataTemplate>
+            </expandable:ExpandableView.SecondaryViewTemplate>
+        </expandable:ExpandableView>
+    </StackLayout>
+</ContentPage>

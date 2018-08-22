@@ -15,15 +15,16 @@ namespace ExpandableViewSample
 				mainStack.Children.Add(CreateExpandable(i));
 			}
 
-			MainPage = new ContentPage
-			{
-				BackgroundColor = Color.White,
-				Content = new ScrollView
-				{
-					Padding = new Thickness(20, Device.RuntimePlatform == Device.iOS ? 20 : 0, 20, 0),
-					Content = mainStack
-				}
-			};
+            //MainPage = new ContentPage
+            //{
+            //	BackgroundColor = Color.White,
+            //	Content = new ScrollView
+            //	{
+            //		Padding = new Thickness(20, Device.RuntimePlatform == Device.iOS ? 20 : 0, 20, 0),
+            //		Content = mainStack
+            //	}
+            //};
+            MainPage = new AttachTapGestureToCustomViewPage();
 		}
 
 		private View CreateExpandable(int number)

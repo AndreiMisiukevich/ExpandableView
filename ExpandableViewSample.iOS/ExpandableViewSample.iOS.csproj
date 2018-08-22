@@ -156,4 +156,9 @@
       <Name>ExpandableViewSample</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\arrow_drop_down.png" />
+    <BundleResource Include="Resources\arrow_drop_down%402x.png" />
+    <BundleResource Include="Resources\arrow_drop_down%403x.png" />
+  </ItemGroup>
 </Project>
