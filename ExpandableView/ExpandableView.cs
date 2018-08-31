@@ -32,7 +32,7 @@ namespace Expandable
 
         public static readonly BindableProperty IsTouchToExpandEnabledProperty = BindableProperty.Create(nameof(IsTouchToExpandEnabled), typeof(bool), typeof(ExpandableView), true);
 
-        public static readonly BindableProperty SecondaryViewHeightRequestProperty = BindableProperty.Create(nameof(SecondaryViewHeightRequest), typeof(double), typeof(ExpandableView), 0.0);
+        public static readonly BindableProperty SecondaryViewHeightRequestProperty = BindableProperty.Create(nameof(SecondaryViewHeightRequest), typeof(double), typeof(ExpandableView), -1.0);
 
         public static readonly BindableProperty ExpandAnimationLengthProperty = BindableProperty.Create(nameof(ExpandAnimationLength), typeof(uint), typeof(ExpandableView), 250u);
 
@@ -157,7 +157,7 @@ namespace Expandable
             }
 
             _startHeight = 0;
-            _endHeight = SecondaryViewHeightRequest > 0
+            _endHeight = SecondaryViewHeightRequest >= 0
                 ? SecondaryViewHeightRequest
                 : _lastVisibleHeight;
 
@@ -174,7 +174,7 @@ namespace Expandable
             }
             else
             {
-                _lastVisibleHeight = _startHeight = SecondaryViewHeightRequest > 0
+                _lastVisibleHeight = _startHeight = SecondaryViewHeightRequest >= 0
                         ? SecondaryViewHeightRequest
                             : !isExpanding
                          ? SecondaryView.Height
