@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Expandable;
+﻿using Expandable;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Diagnostics;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ExpandableViewSample
@@ -34,8 +31,6 @@ namespace ExpandableViewSample
             {
                 rotation = 0;
             }
-
-            Debug.WriteLine(e.IsExpanded, "IsExpanded");
 
             await arrow.RotateTo(rotation, 250, Easing.BounceIn);
         }
