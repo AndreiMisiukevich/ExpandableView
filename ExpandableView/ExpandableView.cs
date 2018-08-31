@@ -10,7 +10,7 @@ namespace Expandable
         public static readonly BindableProperty PrimaryViewProperty = BindableProperty.Create(nameof(PrimaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetPrimaryView(oldValue as View);
-            (bindable as ExpandableView).OnShouldHandleTapToExpandChanged();
+            (bindable as ExpandableView).OnTouchHandlerViewChanged();
         });
 
         public static readonly BindableProperty SecondaryViewTemplateProperty = BindableProperty.Create(nameof(SecondaryViewTemplate), typeof(DataTemplate), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
@@ -25,15 +25,12 @@ namespace Expandable
             (bindable as ExpandableView).OnIsExpandedChanged();
         });
 
-        public static readonly BindableProperty ShouldHandleTapToExpandProperty = BindableProperty.Create(nameof(ShouldHandleTapToExpand), typeof(bool), typeof(ExpandableView), true, propertyChanged: (bindable, oldValue, newValue) =>
-        {
-            (bindable as ExpandableView).OnShouldHandleTapToExpandChanged();
-        });
-
         public static readonly BindableProperty TouchHandlerViewProperty = BindableProperty.Create(nameof(TouchHandlerView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
-            (bindable as ExpandableView).OnShouldHandleTapToExpandChanged();
+            (bindable as ExpandableView).OnTouchHandlerViewChanged();
         });
+
+        public static readonly BindableProperty IsTouchToExpandEnabledProperty = BindableProperty.Create(nameof(IsTouchToExpandEnabled), typeof(bool), typeof(ExpandableView), true);
 
         public static readonly BindableProperty SecondaryViewHeightRequestProperty = BindableProperty.Create(nameof(SecondaryViewHeightRequest), typeof(double), typeof(ExpandableView), 0.0);
 
@@ -54,7 +51,14 @@ namespace Expandable
         {
             _defaultTapGesture = new TapGestureRecognizer
             {
-                Command = new Command(() => IsExpanded = !IsExpanded)
+                Command = new Command(() =>
+                {
+                    if (!IsTouchToExpandEnabled)
+                    {
+                        return;
+                    }
+                    IsExpanded = !IsExpanded;
+                })
             };
         }
 
@@ -76,16 +80,16 @@ namespace Expandable
             set => SetValue(IsExpandedProperty, value);
         }
 
-        public bool ShouldHandleTapToExpand
-        {
-            get => (bool)GetValue(ShouldHandleTapToExpandProperty);
-            set => SetValue(ShouldHandleTapToExpandProperty, value);
-        }
-
         public View TouchHandlerView
         {
             get => GetValue(TouchHandlerViewProperty) as View;
             set => SetValue(TouchHandlerViewProperty, value);
+        }
+
+        public bool IsTouchToExpandEnabled
+        {
+            get => (bool)GetValue(IsTouchToExpandEnabledProperty);
+            set => SetValue(IsTouchToExpandEnabledProperty, value);
         }
 
         public double SecondaryViewHeightRequest
@@ -186,22 +190,12 @@ namespace Expandable
             }
         }
 
-        private void OnShouldHandleTapToExpandChanged()
+        private void OnTouchHandlerViewChanged()
         {
-            if (PrimaryView == null)
-            {
-                return;
-            }
-
-            var viewToAttachTapGesture = TouchHandlerView ?? PrimaryView;
-
-            viewToAttachTapGesture?.GestureRecognizers.Remove(_defaultTapGesture);
+            var touchHandlerView = TouchHandlerView ?? PrimaryView;
+            touchHandlerView?.GestureRecognizers.Remove(_defaultTapGesture);
             PrimaryView?.GestureRecognizers.Remove(_defaultTapGesture);
-
-            if (ShouldHandleTapToExpand)
-            {
-                viewToAttachTapGesture.GestureRecognizers.Add(_defaultTapGesture);
-            }
+            touchHandlerView?.GestureRecognizers.Add(_defaultTapGesture);
         }
 
         private void SetPrimaryView(View oldView)
