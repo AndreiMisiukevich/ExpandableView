@@ -17,7 +17,8 @@ This plugin provides opportunity to create expandable views
 
 **XAML:**
 ```xml
-
+<ContentPage xmlns:expandable="clr-namespace:Expandable;assembly=ExpandableView">
+...
 <expandable:ExpandableView>
     <expandable:ExpandableView.PrimaryView>
         //{YOUR MAIN VIEW HERE}
