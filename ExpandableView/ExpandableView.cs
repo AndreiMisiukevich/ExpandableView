@@ -1,6 +1,5 @@
 ﻿using System;
 using Xamarin.Forms;
-using System.Windows.Input;
 
 namespace Expandable
 {
@@ -8,7 +7,7 @@ namespace Expandable
     {
         public const string ExpandAnimationName = nameof(ExpandAnimationName);
 
-        [Obsolete("This event is obsolete/deprecated and will be removed soon. Use StatusChanged instead.", true)]
+        [Obsolete("This event is obsolete/deprecated and will be removed soon. Use StatusChanged instead. (Expanding/Collapsing)", true)]
         public EventHandler<EventArgs> IsExpandChanged;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
