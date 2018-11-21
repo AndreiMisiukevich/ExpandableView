@@ -1,11 +1,17 @@
 ﻿using System;
 using Xamarin.Forms;
+using System.Windows.Input;
 
 namespace Expandable
 {
     public class ExpandableView : StackLayout
     {
-        public const string ExpandAnimationName = "expandAnimation";
+        public const string ExpandAnimationName = nameof(ExpandAnimationName);
+
+        [Obsolete("This event is obsolete/deprecated and will be removed soon. Use StatusChanged instead.", true)]
+        public EventHandler<EventArgs> IsExpandChanged;
+
+        public event EventHandler<StatusChangedEventArgs> StatusChanged;
 
         public static readonly BindableProperty PrimaryViewProperty = BindableProperty.Create(nameof(PrimaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
@@ -38,14 +44,14 @@ namespace Expandable
 
         public static readonly BindableProperty ExpandAnimationEasingProperty = BindableProperty.Create(nameof(ExpandAnimationEasing), typeof(Easing), typeof(ExpandableView), null);
 
+        public static readonly BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
+
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
         private double _lastVisibleHeight = -1;
         private double _startHeight;
         private double _endHeight;
         private View _secondaryView;
-
-        public EventHandler<ExpandChangedEventArgs> IsExpandChanged;
 
         public ExpandableView()
         {
@@ -108,6 +114,12 @@ namespace Expandable
         {
             get => (Easing)GetValue(ExpandAnimationEasingProperty);
             set => SetValue(ExpandAnimationEasingProperty, value);
+        }
+
+        public ExpandStatus Status
+        {
+            get => (ExpandStatus)GetValue(StatusProperty);
+            set => SetValue(StatusProperty, value);
         }
 
         public View SecondaryView
@@ -236,23 +248,37 @@ namespace Expandable
 
         private void InvokeAnimation()
         {
-            IsExpandChanged?.Invoke(this, new ExpandChangedEventArgs(IsExpanded));
+            RaiseStatusChanged(IsExpanded ? ExpandStatus.Expanding : ExpandStatus.Collapsing);
 
             if (_shouldIgnoreAnimation)
             {
+                RaiseStatusChanged(IsExpanded ? ExpandStatus.Expanded : ExpandStatus.Collapsed);
                 SecondaryView.HeightRequest = _endHeight;
                 SecondaryView.IsVisible = IsExpanded;
                 return;
             }
 
             new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight)
-                .Commit(SecondaryView, ExpandAnimationName, 16, ExpandAnimationLength, ExpandAnimationEasing, (v, r) =>
+                .Commit(SecondaryView, ExpandAnimationName, 16, ExpandAnimationLength, ExpandAnimationEasing, (value, interrupted) =>
                 {
+                    if (interrupted)
+                    {
+                        return;
+                    }
                     if (!IsExpanded)
                     {
                         SecondaryView.IsVisible = false;
+                        RaiseStatusChanged(ExpandStatus.Collapsed);
+                        return;
                     }
+                    RaiseStatusChanged(ExpandStatus.Expanded);
                 });
+        }
+
+        private void RaiseStatusChanged(ExpandStatus status)
+        {
+            Status = status;
+            StatusChanged?.Invoke(this, new StatusChangedEventArgs(status));
         }
     }
 }

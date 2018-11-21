@@ -15,19 +15,19 @@ namespace ExpandableViewSample
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            expandableView.IsExpandChanged += IsExpandChangedHandler;
+            expandableView.StatusChanged += OnStatusChanged;
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            expandableView.IsExpandChanged -= IsExpandChangedHandler;
+            expandableView.StatusChanged -= OnStatusChanged;
         }
 
-        private async void IsExpandChangedHandler(object sender, ExpandChangedEventArgs e)
+        private async void OnStatusChanged(object sender, StatusChangedEventArgs e)
         {
             var rotation = 180;
-            if (!e.IsExpanded)
+            if (e.Status == ExpandStatus.Collapsing)
             {
                 rotation = 0;
             }
