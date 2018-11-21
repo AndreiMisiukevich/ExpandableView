@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>ExpandableView</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>ExpandableView</title>
     <authors>Andrei Misiukevich</authors>
     <owners>Andrei Misiukevich</owners>
@@ -11,7 +11,7 @@
     <iconUrl>https://cdn0.iconfinder.com/data/icons/pinpoint-interface/48/dropdown-512.png</iconUrl>
     <description>Expandable view for Xamarin.Forms</description>
     <summary>This plugin provides opportunity to create expandable views</summary>
-    <tags>expandableView, expanded, expander, expandable, expandable view, forms, xamarin forms, xamarin.forms</tags>
+    <tags>expandableView, expanded, expander, expandable, expandable view, collapse, collapsable, forms, xamarin forms, xamarin.forms</tags>
     <dependencies>
       <group>
           <dependency id="Xamarin.Forms" version="2.4" />
