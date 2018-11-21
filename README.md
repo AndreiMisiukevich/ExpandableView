@@ -1,5 +1,10 @@
 # ExpandableView control for Xamarin Forms
 
+## ExpandableView
+This plugin provides opportunity to create expandable views
+
+![Sample GIF](https://media.giphy.com/media/39hpHTXx2KF2s6faYg/giphy.gif)
+
 ## Setup
 * Available on NuGet: [ExpandableView](http://www.nuget.org/packages/ExpandableView) [![NuGet](https://img.shields.io/nuget/v/ExpandableView.svg?label=NuGet)](https://www.nuget.org/packages/ExpandableView)
 * Add nuget package to your Xamarin.Forms .netStandard/PCL project and to your platform-specific projects
@@ -9,11 +14,6 @@
 |Xamarin.iOS|8.0+|
 |Xamarin.Android|15+|
 |Windows 10 UWP|10.0.10240+|
-
-## ExpandableView
-This plugin provides opportunity to create expandable views
-
-![Sample GIF](https://media.giphy.com/media/39hpHTXx2KF2s6faYg/giphy.gif)
 
 **XAML:**
 ```xml
