@@ -7,9 +7,6 @@ namespace Expandable
     {
         public const string ExpandAnimationName = nameof(ExpandAnimationName);
 
-        [Obsolete("This event is obsolete/deprecated and will be removed soon. Use StatusChanged instead. (Expanding/Collapsing)", true)]
-        public EventHandler<EventArgs> IsExpandChanged;
-
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
 
         public static readonly BindableProperty PrimaryViewProperty = BindableProperty.Create(nameof(PrimaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
