@@ -185,7 +185,9 @@ namespace Expandable
                 _lastVisibleHeight = _startHeight = SecondaryViewHeightRequest >= 0
                         ? SecondaryViewHeightRequest
                             : !isExpanding
-                         ? SecondaryView.Height
+                                 ? SecondaryView.Height - (SecondaryView is Layout<View> l //https://github.com/AndreiMisiukevich/ExpandableView/issues/7
+                                    ? l.Padding.Top + l.Padding.Bottom
+                                    : 0)
                                   : _lastVisibleHeight;
                 _endHeight = 0;
             }
