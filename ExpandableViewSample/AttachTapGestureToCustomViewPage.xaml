@@ -4,9 +4,9 @@
              xmlns:expandable="clr-namespace:Expandable;assembly=ExpandableView"
              x:Class="ExpandableViewSample.AttachTapGestureToCustomViewPage">
     <StackLayout Padding="8">
-        <expandable:ExpandableView x:Name="expandableView"
+<expandable:ExpandableView x:Name="expandableView" BackgroundColor="Red"
                                    TouchHandlerView="{x:Reference arrow}"
-                                   ExpandAnimationLength="600">
+                                   ExpandAnimationLength="100">
             <expandable:ExpandableView.PrimaryView>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Expandable view" FontSize="30" VerticalTextAlignment="Center"/>
@@ -15,7 +15,7 @@
             </expandable:ExpandableView.PrimaryView>
             <expandable:ExpandableView.SecondaryViewTemplate>
                 <DataTemplate>
-                    <StackLayout>
+                    <StackLayout Padding="5">
                         <Label Text="Item" FontSize="Large"/>
                         <Label Text="Item" FontSize="Large"/>
                         <Label Text="Item" FontSize="Large"/>
