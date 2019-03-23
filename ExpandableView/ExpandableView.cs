@@ -38,7 +38,11 @@ namespace Expandable
 
         public static readonly BindableProperty ExpandAnimationLengthProperty = BindableProperty.Create(nameof(ExpandAnimationLength), typeof(uint), typeof(ExpandableView), 250u);
 
-        public static readonly BindableProperty ExpandAnimationEasingProperty = BindableProperty.Create(nameof(ExpandAnimationEasing), typeof(Easing), typeof(ExpandableView), null);
+        public static readonly BindableProperty CollapseAnimationLengthProperty = BindableProperty.Create(nameof(CollapseAnimationLength), typeof(uint), typeof(ExpandableView), 250u);
+
+        public static readonly BindableProperty ExpandAnimationEasingProperty = BindableProperty.Create(nameof(ExpandAnimationEasing), typeof(Easing), typeof(ExpandableView), Easing.SinOut);
+
+        public static readonly BindableProperty CollapseAnimationEasingProperty = BindableProperty.Create(nameof(CollapseAnimationEasing), typeof(Easing), typeof(ExpandableView), Easing.SinIn);
 
         public static readonly BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
 
@@ -106,10 +110,22 @@ namespace Expandable
             set => SetValue(ExpandAnimationLengthProperty, value);
         }
 
+        public uint CollapseAnimationLength
+        {
+            get => (uint)GetValue(CollapseAnimationLengthProperty);
+            set => SetValue(CollapseAnimationLengthProperty, value);
+        }
+
         public Easing ExpandAnimationEasing
         {
             get => (Easing)GetValue(ExpandAnimationEasingProperty);
             set => SetValue(ExpandAnimationEasingProperty, value);
+        }
+
+        public Easing CollapseAnimationEasing
+        {
+            get => (Easing)GetValue(CollapseAnimationEasingProperty);
+            set => SetValue(CollapseAnimationEasingProperty, value);
         }
 
         public ExpandStatus Status
@@ -202,10 +218,10 @@ namespace Expandable
 
         private void OnTouchHandlerViewChanged()
         {
-            var touchHandlerView = TouchHandlerView ?? PrimaryView;
-            touchHandlerView?.GestureRecognizers.Remove(_defaultTapGesture);
+            var gesturesList = (TouchHandlerView ?? PrimaryView)?.GestureRecognizers;
+            gesturesList?.Remove(_defaultTapGesture);
             PrimaryView?.GestureRecognizers.Remove(_defaultTapGesture);
-            touchHandlerView?.GestureRecognizers.Add(_defaultTapGesture);
+            gesturesList?.Add(_defaultTapGesture);
         }
 
         private void SetPrimaryView(View oldView)
@@ -256,8 +272,16 @@ namespace Expandable
                 return;
             }
 
+            var length = ExpandAnimationLength;
+            var easing = ExpandAnimationEasing;
+            if(!IsExpanded)
+            {
+                length = CollapseAnimationLength;
+                easing = CollapseAnimationEasing;
+            }
+
             new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight)
-                .Commit(SecondaryView, ExpandAnimationName, 16, ExpandAnimationLength, ExpandAnimationEasing, (value, interrupted) =>
+                .Commit(SecondaryView, ExpandAnimationName, 16, length, easing, (value, interrupted) =>
                 {
                     if (interrupted)
                     {
