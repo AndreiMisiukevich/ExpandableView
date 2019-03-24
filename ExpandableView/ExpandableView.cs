@@ -1,5 +1,6 @@
 ﻿using System;
 using Xamarin.Forms;
+using System.Windows.Input;
 
 namespace Expandable
 {
@@ -8,6 +9,8 @@ namespace Expandable
         public const string ExpandAnimationName = nameof(ExpandAnimationName);
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
+
+        public event Action Tapped;
 
         public static readonly BindableProperty PrimaryViewProperty = BindableProperty.Create(nameof(PrimaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
@@ -46,6 +49,8 @@ namespace Expandable
 
         public static readonly BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
 
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ExpandableView), default(ICommand));
+
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
         private double _lastVisibleHeight = -1;
@@ -59,6 +64,8 @@ namespace Expandable
             {
                 Command = new Command(() =>
                 {
+                    Command?.Execute(null);
+                    Tapped?.Invoke();
                     if (!IsTouchToExpandEnabled)
                     {
                         return;
@@ -132,6 +139,12 @@ namespace Expandable
         {
             get => (ExpandStatus)GetValue(StatusProperty);
             set => SetValue(StatusProperty, value);
+        }
+
+        public ICommand Command
+        {
+            get => GetValue(CommandProperty) as ICommand;
+            set => SetValue(CommandProperty, value);
         }
 
         public View SecondaryView
