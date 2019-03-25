@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Expandable
@@ -21,7 +22,7 @@ namespace Expandable
             (bindable as ExpandableView).OnIsExpandedChanged();
         });
 
-        public static readonly BindableProperty IsExpandedProperty = BindableProperty.Create(nameof(IsExpanded), typeof(bool), typeof(ExpandableView), default(bool), BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
+        public static BindableProperty IsExpandedProperty = BindableProperty.Create(nameof(IsExpanded), typeof(bool), typeof(ExpandableView), default(bool), BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetSecondaryView();
             (bindable as ExpandableView).OnIsExpandedChanged();
@@ -40,7 +41,7 @@ namespace Expandable
 
         public static readonly BindableProperty ExpandAnimationEasingProperty = BindableProperty.Create(nameof(ExpandAnimationEasing), typeof(Easing), typeof(ExpandableView), null);
 
-        public static readonly BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
+        public static BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
 
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
@@ -51,6 +52,7 @@ namespace Expandable
 
         public ExpandableView()
         {
+            Task.Delay(200);
             _defaultTapGesture = new TapGestureRecognizer
             {
                 Command = new Command(() =>
@@ -155,7 +157,7 @@ namespace Expandable
             }
 
             SecondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
-
+            Task.Delay(100);
             var isExpanding = SecondaryView.AnimationIsRunning(ExpandAnimationName);
             SecondaryView.AbortAnimation(ExpandAnimationName);
 
@@ -246,6 +248,7 @@ namespace Expandable
 
         private void InvokeAnimation()
         {
+            Task.Delay(200);
             RaiseStatusChanged(IsExpanded ? ExpandStatus.Expanding : ExpandStatus.Collapsing);
 
             if (_shouldIgnoreAnimation)
