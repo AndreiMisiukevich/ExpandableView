@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Expandable
@@ -52,7 +51,6 @@ namespace Expandable
 
         public ExpandableView()
         {
-            Task.Delay(200);
             _defaultTapGesture = new TapGestureRecognizer
             {
                 Command = new Command(() =>
@@ -157,7 +155,6 @@ namespace Expandable
             }
 
             SecondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
-            Task.Delay(100);
             var isExpanding = SecondaryView.AnimationIsRunning(ExpandAnimationName);
             SecondaryView.AbortAnimation(ExpandAnimationName);
 
@@ -248,7 +245,6 @@ namespace Expandable
 
         private void InvokeAnimation()
         {
-            Task.Delay(200);
             RaiseStatusChanged(IsExpanded ? ExpandStatus.Expanding : ExpandStatus.Collapsing);
 
             if (_shouldIgnoreAnimation)
