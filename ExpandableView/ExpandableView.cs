@@ -266,12 +266,16 @@ namespace Expandable
 
         private void OnSecondaryViewSizeChanged(object sender, EventArgs e)
         {
-            if (SecondaryView.Height <= 0) return;
+            if (SecondaryView.Height <= 0 || SizeChangeIsInsignificant()) return;
             SecondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
             SecondaryView.HeightRequest = 0;
+            _startHeight = _lastVisibleHeight;
             _endHeight = SecondaryView.Height;
+            _lastVisibleHeight = SecondaryView.Height;
             InvokeAnimation();
         }
+
+        private bool SizeChangeIsInsignificant() => Math.Abs(SecondaryView.Height - _lastVisibleHeight) < 0.01;
 
         private void InvokeAnimation()
         {
@@ -287,7 +291,7 @@ namespace Expandable
 
             var length = ExpandAnimationLength;
             var easing = ExpandAnimationEasing;
-            if(!IsExpanded)
+            if(_endHeight < _startHeight)
             {
                 length = CollapseAnimationLength;
                 easing = CollapseAnimationEasing;
@@ -307,6 +311,7 @@ namespace Expandable
                         return;
                     }
                     RaiseStatusChanged(ExpandStatus.Expanded);
+                    SecondaryView.SizeChanged += OnSecondaryViewSizeChanged;
                 });
         }
 
