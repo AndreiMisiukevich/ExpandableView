@@ -24,6 +24,17 @@ namespace ExpandableViewSample
 
         private View CreateExpandable(int number)
         {
+            var second = new Label
+            {
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontAttributes = FontAttributes.Italic,
+                HeightRequest = 40,
+                BackgroundColor = Color.Black,
+                TextColor = Color.White,
+                Text = $"The Label of {number}"
+            };
+
             return new ExpandableView
             {
                 PrimaryView = new Label
@@ -43,39 +54,36 @@ namespace ExpandableViewSample
                     Spacing = 10,
                     Padding = new Thickness(20, 0),
                     Children = {
-                        new Label
+                        new Button
                         {
-                            VerticalTextAlignment = TextAlignment.Center,
-                            HorizontalTextAlignment = TextAlignment.Center,
+                            CornerRadius = 0,
                             FontAttributes = FontAttributes.Italic,
                             HeightRequest = 40,
                             BackgroundColor = Color.Black,
                             TextColor = Color.White,
-                            Text = $"The First of {number}"
+                            Text = $"Increase height of label",
+                            Command = new Command(() => ChangeHeight(second, 5))
                         },
-                        new Label
+                        second,
+                        new Button
                         {
-                            VerticalTextAlignment = TextAlignment.Center,
-                            HorizontalTextAlignment = TextAlignment.Center,
+                            CornerRadius = 0,
                             FontAttributes = FontAttributes.Italic,
                             HeightRequest = 40,
                             BackgroundColor = Color.Black,
                             TextColor = Color.White,
-                            Text = $"The Second {number}"
-                        },
-                        new Label
-                        {
-                            VerticalTextAlignment = TextAlignment.Center,
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            FontAttributes = FontAttributes.Italic,
-                            HeightRequest = 40,
-                            BackgroundColor = Color.Black,
-                            TextColor = Color.White,
-                            Text = $"The Third {number}"
+                            Text = $"Decrease height of the label",
+                            Command = new Command(() => ChangeHeight(second, -5))
                         }
                     }
                 })
             };
+        }
+
+        private void ChangeHeight(Label target, double sizeChange)
+        {
+            target.HeightRequest += sizeChange;
+            ((StackLayout)target.Parent).HeightRequest = -1;
         }
     }
 }
