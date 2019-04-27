@@ -24,7 +24,7 @@ namespace ExpandableViewSample
 
         private View CreateExpandable(int number)
         {
-            var second = new Label
+            var secondLabel = new Label
             {
                 VerticalTextAlignment = TextAlignment.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -62,9 +62,9 @@ namespace ExpandableViewSample
                             BackgroundColor = Color.Black,
                             TextColor = Color.White,
                             Text = $"Increase height of label",
-                            Command = new Command(() => ChangeHeight(second, 5))
+                            Command = new Command(() => ChangeHeight(secondLabel, 20))
                         },
-                        second,
+                        secondLabel,
                         new Button
                         {
                             CornerRadius = 0,
@@ -73,7 +73,7 @@ namespace ExpandableViewSample
                             BackgroundColor = Color.Black,
                             TextColor = Color.White,
                             Text = $"Decrease height of the label",
-                            Command = new Command(() => ChangeHeight(second, -5))
+                            Command = new Command(() => ChangeHeight(secondLabel, -20))
                         }
                     }
                 })
@@ -83,7 +83,7 @@ namespace ExpandableViewSample
         private void ChangeHeight(Label target, double sizeChange)
         {
             target.HeightRequest += sizeChange;
-            ((StackLayout)target.Parent).HeightRequest = -1;
+            //TODO: call redraw
         }
     }
 }
