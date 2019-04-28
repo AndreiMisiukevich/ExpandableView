@@ -83,7 +83,7 @@ namespace ExpandableViewSample
         private void ChangeHeight(Label target, double sizeChange)
         {
             target.HeightRequest += sizeChange;
-            //TODO: call redraw
+            (target.Parent.Parent as ExpandableView).ForceUpdateSizeCommand.Execute(null);
         }
     }
 }

@@ -51,6 +51,8 @@ namespace Expandable
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ExpandableView), default(ICommand));
 
+        public static readonly BindableProperty ForceUpdateSizeCommandProperty = BindableProperty.Create(nameof(ForceUpdateSizeCommand), typeof(ICommand), typeof(ExpandableView), default(ICommand), BindingMode.OneWayToSource);
+
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
         private double _lastVisibleHeight = -1;
@@ -73,6 +75,8 @@ namespace Expandable
                     IsExpanded = !IsExpanded;
                 })
             };
+
+            ForceUpdateSizeCommand = new Command(ForceUpdateSize);
         }
 
         public View PrimaryView
@@ -147,6 +151,12 @@ namespace Expandable
             set => SetValue(CommandProperty, value);
         }
 
+        public ICommand ForceUpdateSizeCommand
+        {
+            get => GetValue(ForceUpdateSizeCommandProperty) as ICommand;
+            set => SetValue(ForceUpdateSizeCommandProperty, value);
+        }
+
         public View SecondaryView
         {
             get => _secondaryView;
@@ -170,6 +180,18 @@ namespace Expandable
             }
         }
 
+        public void ForceUpdateSize()
+        {
+            _lastVisibleHeight = -1;
+
+            if (SecondaryView == null)
+            {
+                return;
+            }
+
+            OnIsExpandedChanged();
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -188,12 +210,18 @@ namespace Expandable
             var isExpanding = SecondaryView.AnimationIsRunning(ExpandAnimationName);
             SecondaryView.AbortAnimation(ExpandAnimationName);
 
+
+            _startHeight = SecondaryView.IsVisible
+                ? Math.Max(SecondaryView.Height - (SecondaryView is Layout l
+                                    ? l.Padding.Top + l.Padding.Bottom
+                                    : 0), 0)
+                : 0;
+
             if (IsExpanded)
             {
                 SecondaryView.IsVisible = true;
             }
 
-            _startHeight = 0;
             _endHeight = SecondaryViewHeightRequest >= 0
                 ? SecondaryViewHeightRequest
                 : _lastVisibleHeight;
@@ -214,8 +242,8 @@ namespace Expandable
                 _lastVisibleHeight = _startHeight = SecondaryViewHeightRequest >= 0
                         ? SecondaryViewHeightRequest
                             : !isExpanding
-                                 ? SecondaryView.Height - (SecondaryView is Layout l
-                                    ? l.Padding.Top + l.Padding.Bottom
+                                 ? SecondaryView.Height - (SecondaryView is Layout lay
+                                    ? lay.Padding.Top + lay.Padding.Bottom
                                     : 0)
                                   : _lastVisibleHeight;
                 _endHeight = 0;
@@ -291,6 +319,11 @@ namespace Expandable
             {
                 length = CollapseAnimationLength;
                 easing = CollapseAnimationEasing;
+            }
+
+            if(_lastVisibleHeight > 0)
+            {
+                length = Math.Max((uint)(length * (Math.Abs(_endHeight - _startHeight) / _lastVisibleHeight)), 1);
             }
 
             new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight)
