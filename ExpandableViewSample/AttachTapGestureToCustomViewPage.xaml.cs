@@ -26,11 +26,10 @@ namespace ExpandableViewSample
 
         private async void OnStatusChanged(object sender, StatusChangedEventArgs e)
         {
-            var rotation = -1;
+            var rotation = 0;
             switch(e.Status)
             {
                 case ExpandStatus.Collapsing:
-                    rotation = 0;
                     break;
                 case ExpandStatus.Expanding:
                     rotation = 180;
@@ -39,7 +38,7 @@ namespace ExpandableViewSample
                     return;
             }
 
-            await arrow.RotateTo(rotation, 250, Easing.BounceIn);
+            await arrow.RotateTo(rotation, 200, Easing.CubicInOut);
         }
     }
 }

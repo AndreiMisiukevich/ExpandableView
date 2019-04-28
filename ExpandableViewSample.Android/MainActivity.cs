@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using TouchEffect.Droid;
 
 namespace ExpandableViewSample.Droid
 {
@@ -20,7 +21,8 @@ namespace ExpandableViewSample.Droid
 			base.OnCreate(bundle);
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
-			LoadApplication(new App());
+            new TouchViewRenderer();
+            LoadApplication(new App());
 		}
 	}
 }

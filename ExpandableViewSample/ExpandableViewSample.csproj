@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.0.0.446417" />
+    <PackageReference Include="TouchView" Version="2.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MainPage.xaml.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using TouchEffect.iOS;
 
 namespace ExpandableViewSample.iOS
 {
@@ -23,6 +24,7 @@ namespace ExpandableViewSample.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init();
+            TouchViewRenderer.Initialize();
 			LoadApplication(new App());
 
 			return base.FinishedLaunching(app, options);
