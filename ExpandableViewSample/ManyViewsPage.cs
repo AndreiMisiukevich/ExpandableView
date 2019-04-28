@@ -106,8 +106,6 @@ namespace ExpandableViewSample
                 Command = new Command(() => exp.IsExpanded = !exp.IsExpanded)
             };
 
-            exp.PrimaryView.ChildAdded += (sender, e) => ExpandableOnChildAdded(e.Element);
-
             (exp.PrimaryView as TouchView).Children.Add(new Frame
             {
                 CornerRadius = 5,
@@ -133,14 +131,6 @@ namespace ExpandableViewSample
                 }
             });
 
-
-            (exp.PrimaryView as TouchView).StatusChanged += (sender, args) =>
-            {
-                if(args.Status == TouchEffect.Enums.TouchStatus.Canceled)
-                {
-                    (exp.PrimaryView as TouchView).Command.Execute(null);
-                }
-            };
 
             return exp;
         }
