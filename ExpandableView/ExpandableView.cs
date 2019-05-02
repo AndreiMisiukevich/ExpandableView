@@ -1,6 +1,8 @@
 ﻿using System;
 using Xamarin.Forms;
 using System.Windows.Input;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 namespace Expandable
 {
@@ -55,6 +57,7 @@ namespace Expandable
 
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
+        private bool _hasRenderer;
         private double _lastVisibleHeight = -1;
         private double _startHeight;
         private double _endHeight;
@@ -183,12 +186,6 @@ namespace Expandable
         public void ForceUpdateSize()
         {
             _lastVisibleHeight = -1;
-
-            if (SecondaryView == null)
-            {
-                return;
-            }
-
             OnIsExpandedChanged();
         }
 
@@ -197,6 +194,25 @@ namespace Expandable
             base.OnBindingContextChanged();
             _lastVisibleHeight = -1;
         }
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if(propertyName == "Renderer")
+            {
+                if (!_hasRenderer)
+                {
+                    _hasRenderer = true;
+                    Device.Info.PropertyChanged += OnDeviceOrientationChanged;
+                    return;
+                }
+                _hasRenderer = false;
+                Device.Info.PropertyChanged -= OnDeviceOrientationChanged;
+            }
+        }
+
+        private void OnDeviceOrientationChanged(object sender, PropertyChangedEventArgs e)
+            => ForceUpdateSize();
 
         private void OnIsExpandedChanged()
         {
