@@ -26,6 +26,14 @@ namespace ExpandableViewSample
                             Command = new Command(() => {
                                 MainPage.Navigation.PushAsync(new AttachTapGestureToCustomViewPage());
                             })
+                        },
+                        new Button
+                        {
+                            Text = "Nested expandable",
+                            Command = new Command(() =>
+                            {
+                                MainPage.Navigation.PushAsync(new NestedExpandablePage());
+                            })
                         }
                     }
                 }
