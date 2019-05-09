@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using System.Windows.Input;
+using static System.Math;
 
 namespace Expandable
 {
@@ -56,6 +57,7 @@ namespace Expandable
         private readonly TapGestureRecognizer _defaultTapGesture;
         private bool _shouldIgnoreAnimation;
         private double _lastVisibleHeight = -1;
+        private double _previousWidth = -1;
         private double _startHeight;
         private double _endHeight;
         private View _secondaryView;
@@ -183,12 +185,6 @@ namespace Expandable
         public void ForceUpdateSize()
         {
             _lastVisibleHeight = -1;
-
-            if (SecondaryView == null)
-            {
-                return;
-            }
-
             OnIsExpandedChanged();
         }
 
@@ -198,9 +194,19 @@ namespace Expandable
             _lastVisibleHeight = -1;
         }
 
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            if (Abs(width - _previousWidth) >= double.Epsilon)
+            {
+                ForceUpdateSize();
+            }
+            _previousWidth = width;
+        }
+
         private void OnIsExpandedChanged()
         {
-            if (SecondaryView == null)
+            if (SecondaryView == null || (!IsExpanded && !SecondaryView.IsVisible))
             {
                 return;
             }
@@ -212,7 +218,7 @@ namespace Expandable
 
 
             _startHeight = SecondaryView.IsVisible
-                ? Math.Max(SecondaryView.Height - (SecondaryView is Layout l
+                ? Max(SecondaryView.Height - (SecondaryView is Layout l
                                     ? l.Padding.Top + l.Padding.Bottom
                                     : 0), 0)
                 : 0;
@@ -323,7 +329,7 @@ namespace Expandable
 
             if(_lastVisibleHeight > 0)
             {
-                length = Math.Max((uint)(length * (Math.Abs(_endHeight - _startHeight) / _lastVisibleHeight)), 1);
+                length = Max((uint)(length * (Abs(_endHeight - _startHeight) / _lastVisibleHeight)), 1);
             }
 
             new Animation(v => SecondaryView.HeightRequest = v, _startHeight, _endHeight)
