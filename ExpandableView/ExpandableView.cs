@@ -191,7 +191,7 @@ namespace Expandable
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            _lastVisibleHeight = -1;
+            ForceUpdateSize();
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -321,13 +321,13 @@ namespace Expandable
 
             var length = ExpandAnimationLength;
             var easing = ExpandAnimationEasing;
-            if(!IsExpanded)
+            if (!IsExpanded)
             {
                 length = CollapseAnimationLength;
                 easing = CollapseAnimationEasing;
             }
 
-            if(_lastVisibleHeight > 0)
+            if (_lastVisibleHeight > 0)
             {
                 length = Max((uint)(length * (Abs(_endHeight - _startHeight) / _lastVisibleHeight)), 1);
             }
