@@ -2,17 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:expandable="clr-namespace:Expandable;assembly=ExpandableView"
-             x:Class="ExpandableViewSample.AttachTapGestureToCustomViewPage">
+             x:Class="ExpandableViewSample.AttachTapGestureToCustomViewPage"
+             x:Name="page">
     <StackLayout Padding="8">
-<expandable:ExpandableView x:Name="expandableView" BackgroundColor="Red"
-                                   TouchHandlerView="{x:Reference arrow}"
-                                   ExpandAnimationLength="100">
+<expandable:ExpandableView x:Name="expandableView" 
+                           BackgroundColor="Red"
+                           TouchHandlerView="{x:Reference arrow}"
+                           CommandParameter="some text"
+                           Command="{Binding Path=TapCommand, Source={x:Reference page}}"
+                           ExpandAnimationLength="100">
+            
             <expandable:ExpandableView.PrimaryView>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Expandable view" FontSize="30" VerticalTextAlignment="Center"/>
                     <Image x:Name="arrow" Source="arrow_drop_down.png" HeightRequest="60" WidthRequest="60" HorizontalOptions="EndAndExpand"/>
                 </StackLayout>
             </expandable:ExpandableView.PrimaryView>
+            
             <expandable:ExpandableView.SecondaryViewTemplate>
                 <DataTemplate>
                     <StackLayout Padding="5">
@@ -24,6 +30,7 @@
                     </StackLayout>
                 </DataTemplate>
             </expandable:ExpandableView.SecondaryViewTemplate>
+            
         </expandable:ExpandableView>
     </StackLayout>
 </ContentPage>

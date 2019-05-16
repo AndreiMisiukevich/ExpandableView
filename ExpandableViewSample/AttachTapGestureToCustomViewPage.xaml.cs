@@ -1,6 +1,7 @@
 ﻿using Expandable;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Windows.Input;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ExpandableViewSample
@@ -11,6 +12,12 @@ namespace ExpandableViewSample
         {
             InitializeComponent();
         }
+
+        private ICommand _tapCommand;
+        public ICommand TapCommand => _tapCommand ?? (_tapCommand = new Command(p =>
+        {
+            DisplayAlert("Tapped", p.ToString(), "Ok");
+        }));
 
         protected override void OnAppearing()
         {
