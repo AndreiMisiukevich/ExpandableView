@@ -50,6 +50,8 @@ namespace Expandable
 
         public static readonly BindableProperty StatusProperty = BindableProperty.Create(nameof(Status), typeof(ExpandStatus), typeof(ExpandableView), default(ExpandStatus), BindingMode.OneWayToSource);
 
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ExpandableView), default(object));
+
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ExpandableView), default(ICommand));
 
         public static readonly BindableProperty ForceUpdateSizeCommandProperty = BindableProperty.Create(nameof(ForceUpdateSizeCommand), typeof(ICommand), typeof(ExpandableView), default(ICommand), BindingMode.OneWayToSource);
@@ -68,7 +70,7 @@ namespace Expandable
             {
                 Command = new Command(() =>
                 {
-                    Command?.Execute(null);
+                    Command?.Execute(CommandParameter);
                     Tapped?.Invoke();
                     if (!IsTouchToExpandEnabled)
                     {
@@ -145,6 +147,12 @@ namespace Expandable
         {
             get => (ExpandStatus)GetValue(StatusProperty);
             set => SetValue(StatusProperty, value);
+        }
+
+        public object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public ICommand Command
