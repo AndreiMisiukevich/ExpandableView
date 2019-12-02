@@ -35,11 +35,6 @@ namespace ExpandableViewSample
                 })
             };
 
-            nestedExp.Command = new Command(() =>
-            {
-                mainExp.SecondaryView.HeightRequest = -1;
-            });
-
             Content = new StackLayout
             {
                 Children =

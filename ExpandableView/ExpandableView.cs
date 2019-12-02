@@ -68,8 +68,18 @@ namespace Expandable
         {
             _defaultTapGesture = new TapGestureRecognizer
             {
-                Command = new Command(() =>
+                CommandParameter = this,
+                Command = new Command(p =>
                 {
+                    var view = (p as View).Parent;
+                    while(view != null && !(view is Page))
+                    {
+                        if(view is ExpandableView ancestorExpandable)
+                        {
+                            ancestorExpandable.SecondaryView.HeightRequest = -1;
+                        }
+                        view = view.Parent;
+                    }
                     Command?.Execute(CommandParameter);
                     Tapped?.Invoke();
                     if (!IsTouchToExpandEnabled)
