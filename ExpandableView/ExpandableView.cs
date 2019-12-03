@@ -19,6 +19,13 @@ namespace Expandable
             (bindable as ExpandableView).OnTouchHandlerViewChanged();
         });
 
+        public static readonly BindableProperty SecondaryViewProperty = BindableProperty.Create(nameof(SecondaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
+        {
+            (bindable as ExpandableView).SetSecondaryView(oldValue as View, newValue as View);
+            (bindable as ExpandableView).SetSecondaryView(true);
+            (bindable as ExpandableView).OnIsExpandedChanged();
+        });
+
         public static readonly BindableProperty SecondaryViewTemplateProperty = BindableProperty.Create(nameof(SecondaryViewTemplate), typeof(DataTemplate), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetSecondaryView(true);
@@ -62,7 +69,6 @@ namespace Expandable
         private double _previousWidth = -1;
         private double _startHeight;
         private double _endHeight;
-        private View _secondaryView;
 
         public ExpandableView()
         {
@@ -97,6 +103,12 @@ namespace Expandable
         {
             get => GetValue(PrimaryViewProperty) as View;
             set => SetValue(PrimaryViewProperty, value);
+        }
+
+        public View SecondaryView
+        {
+            get => GetValue(SecondaryViewProperty) as View;
+            set => SetValue(SecondaryViewProperty, value);
         }
 
         public DataTemplate SecondaryViewTemplate
@@ -175,29 +187,6 @@ namespace Expandable
         {
             get => GetValue(ForceUpdateSizeCommandProperty) as ICommand;
             set => SetValue(ForceUpdateSizeCommandProperty, value);
-        }
-
-        public View SecondaryView
-        {
-            get => _secondaryView;
-            private set
-            {
-                if (_secondaryView != null)
-                {
-                    _secondaryView.SizeChanged -= OnSecondaryViewSizeChanged;
-                    Children.Remove(_secondaryView);
-                }
-                if (value != null)
-                {
-                    if (value is Layout layout)
-                    {
-                        layout.IsClippedToBounds = true;
-                    }
-                    value.HeightRequest = 0;
-                    value.IsVisible = false;
-                    Children.Add(_secondaryView = value);
-                }
-            }
         }
 
         public void ForceUpdateSize()
@@ -302,7 +291,26 @@ namespace Expandable
         {
             if (IsExpanded && (SecondaryView == null || forceUpdate))
             {
-                SecondaryView = CreateSecondaryView();
+                SecondaryView = CreateSecondaryView() ?? SecondaryView;
+            }
+        }
+
+        private void SetSecondaryView(View oldView, View newView)
+        {
+            if (oldView != null)
+            {
+                oldView.SizeChanged -= OnSecondaryViewSizeChanged;
+                Children.Remove(oldView);
+            }
+            if (newView != null)
+            {
+                if (newView is Layout layout)
+                {
+                    layout.IsClippedToBounds = true;
+                }
+                newView.HeightRequest = 0;
+                newView.IsVisible = false;
+                Children.Add(newView);
             }
         }
 
