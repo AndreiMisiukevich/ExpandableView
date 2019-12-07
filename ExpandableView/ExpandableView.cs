@@ -60,6 +60,7 @@ namespace Expandable
         public static readonly BindableProperty ForceUpdateSizeCommandProperty = BindableProperty.Create(nameof(ForceUpdateSizeCommand), typeof(ICommand), typeof(ExpandableView), default(ICommand), BindingMode.OneWayToSource);
 
         private readonly TapGestureRecognizer _defaultTapGesture;
+        private DataTemplate _previousTemplate;
         private bool _shouldIgnoreAnimation;
         private double _lastVisibleHeight = -1;
         private double _previousWidth = -1;
@@ -194,7 +195,8 @@ namespace Expandable
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            ForceUpdateSize();
+            _lastVisibleHeight = -1;
+            SetSecondaryView(true);
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -315,10 +317,15 @@ namespace Expandable
         private View CreateSecondaryView()
         {
             var template = SecondaryViewTemplate;
-            if (template is DataTemplateSelector selector)
+            while (template is DataTemplateSelector selector)
             {
                 template = selector.SelectTemplate(BindingContext, this);
             }
+            if(template == _previousTemplate && SecondaryView != null)
+            {
+                return null;
+            }
+            _previousTemplate = template;
             return template?.CreateContent() as View;
         }
 

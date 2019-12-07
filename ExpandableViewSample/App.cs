@@ -15,13 +15,6 @@ namespace ExpandableViewSample
                     Children = {
                         new Button
                         {
-                            Text = "Many views",
-                            Command = new Command(() => {
-                                MainPage.Navigation.PushAsync(new ManyViewsPage());
-                            })
-                        },
-                        new Button
-                        {
                             Text = "Arrow view",
                             Command = new Command(() => {
                                 MainPage.Navigation.PushAsync(new AttachTapGestureToCustomViewPage());
