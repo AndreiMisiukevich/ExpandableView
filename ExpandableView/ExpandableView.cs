@@ -22,20 +22,16 @@ namespace Expandable
         public static readonly BindableProperty SecondaryViewProperty = BindableProperty.Create(nameof(SecondaryView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetSecondaryView(oldValue as View, newValue as View);
-            (bindable as ExpandableView).SetSecondaryView(true);
-            (bindable as ExpandableView).OnIsExpandedChanged();
         });
 
         public static readonly BindableProperty SecondaryViewTemplateProperty = BindableProperty.Create(nameof(SecondaryViewTemplate), typeof(DataTemplate), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetSecondaryView(true);
-            (bindable as ExpandableView).OnIsExpandedChanged();
         });
 
         public static readonly BindableProperty IsExpandedProperty = BindableProperty.Create(nameof(IsExpanded), typeof(bool), typeof(ExpandableView), default(bool), BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
         {
             (bindable as ExpandableView).SetSecondaryView();
-            (bindable as ExpandableView).OnIsExpandedChanged();
         });
 
         public static readonly BindableProperty TouchHandlerViewProperty = BindableProperty.Create(nameof(TouchHandlerView), typeof(View), typeof(ExpandableView), null, propertyChanged: (bindable, oldValue, newValue) =>
@@ -293,6 +289,7 @@ namespace Expandable
             {
                 SecondaryView = CreateSecondaryView() ?? SecondaryView;
             }
+            OnIsExpandedChanged();
         }
 
         private void SetSecondaryView(View oldView, View newView)
@@ -312,6 +309,7 @@ namespace Expandable
                 newView.IsVisible = false;
                 Children.Add(newView);
             }
+            SetSecondaryView(true);
         }
 
         private View CreateSecondaryView()
