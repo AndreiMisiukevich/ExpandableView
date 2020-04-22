@@ -1,3 +1,7 @@
+# IMPORTANT: THIS CONTROL WAS MERGED INTO XAMARIN.FORMS
+**https://github.com/xamarin/Xamarin.Forms/pull/9044**
+It's available since version 4.6 as **Expander** under Expander_Experimental flag.
+
 # ExpandableView control for Xamarin Forms
 
 ## ExpandableView
