@@ -38,7 +38,7 @@ This plugin provides opportunity to create expandable views
 
 The sample you can find here https://github.com/AndreiMisiukevich/ExpandableView/blob/master/ExpandableViewSample/App.cs
 
-Check source code for more info, or 🇧🇾 ***just ask me =)*** 🇧🇾
+Check source code for more info, or ***just ask me =)***
 
 ## License
 The MIT License (MIT) see [License file](LICENSE)
