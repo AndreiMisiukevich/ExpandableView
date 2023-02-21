@@ -45,4 +45,3 @@ The MIT License (MIT) see [License file](LICENSE)
 
 ## Contribution
 Feel free to create issues and PRs 😃
-
